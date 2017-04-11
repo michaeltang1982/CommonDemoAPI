@@ -45,9 +45,17 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Library.CSOM\Library.CSOM.csproj">
+      <Project>{aec545ad-4365-4d83-9231-6ae02a7ed173}</Project>
+      <Name>Library.CSOM</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Model\Models.csproj">
       <Project>{a8629657-4e7b-4d47-a995-687fe2b3f0db}</Project>
       <Name>Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NET.Core\NET.Core.csproj">
+      <Project>{2f12c5c5-69d8-4815-912c-39ae3ee1be7d}</Project>
+      <Name>NET.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
