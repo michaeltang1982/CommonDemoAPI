@@ -16,7 +16,7 @@ namespace Sierra.Azure.CommonDemoAPI
 
             // e.g. container.RegisterType<ITestService, TestService>();
             string configString = ConfigurationManager.AppSettings["IDoThisRepositoryConfig"];
-            Repositories.IDoThis.DatabaseRepository repository = new Repositories.IDoThis.DatabaseRepository(configString);
+            var repository = new Repositories.IDoThis.SharePointRepository(configString);
             container.RegisterInstance<Models.IDoThis.IDoThisRepository>(repository);
 
             

@@ -36,7 +36,7 @@ namespace Sierra.Azure.CommonDemoAPI
                         // hold additional metadata for an API. Version and title are required but you can also provide
                         // additional fields by chaining methods off SingleApiVersion.
                         //
-                        c.SingleApiVersion("v1", "CommonDemoAPI");
+                        c.SingleApiVersion("v1", "Sierra.Azure.CommonDemoAPI");
 
                         // If your API has multiple versions, use "MultipleApiVersions" instead of "SingleApiVersion".
                         // In this case, you must provide a lambda that tells Swashbuckle which actions should be

@@ -1,1 +1,1 @@
-﻿<%@ Application Codebehind="Global.asax.cs" Inherits="CommonDemoAPI.WebApiApplication" Language="C#" %>
+﻿<%@ Application Codebehind="Global.asax.cs" Inherits="Sierra.Azure.CommonDemoAPI.WebApiApplication" Language="C#" %>
