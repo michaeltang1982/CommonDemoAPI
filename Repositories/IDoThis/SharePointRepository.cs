@@ -7,6 +7,7 @@ using Sierra.Azure.CommonDemoAPI.Models.IDoThis;
 using Sierra.SharePoint.Library.CSOM;
 using Sierra.NET.Core;
 using Microsoft.IdentityModel.Clients.ActiveDirectory;
+using System.Web;
 
 namespace Sierra.Azure.CommonDemoAPI.Repositories.IDoThis
 {
@@ -18,15 +19,15 @@ namespace Sierra.Azure.CommonDemoAPI.Repositories.IDoThis
             _configuration = configuration;
         }
 
-        public UserProfile GetUserProfile(string userId)
+        public async Task<UserProfile> GetUserProfile(string userId)
         {
             try
             {
                 SimpleTextLogger logger = new SimpleTextLogger();
 
                 //cannot use these lines as they cause error -- need to use routines below
-                var credentials = System.Net.CredentialCache.DefaultCredentials;
-                SPClientUtility context = new SPClientUtility(logger, credentials);
+                var token = await GetAccessToken();
+                SPClientUtility context = new SPClientUtility(logger, token);
 
 
                 var lists = context.GetAllListTitles("https://sierrasystemsgroup.sharepoint.com/sites/siza");
@@ -39,45 +40,31 @@ namespace Sierra.Azure.CommonDemoAPI.Repositories.IDoThis
             }
         }
 
-        //private async Task<string> GetAccessToken()
-        //{
-        //    string clientId = "todo";// ConfigurationManager.AppSettings["ida:ClientId"];
-        //    string appKey = "todo";// ConfigurationManager.AppSettings["ida:AppKey"];
-        //    string aadInstance = "todo";// ConfigurationManager.AppSettings["ida:AADInstance"];
-        //    string domain = "todo";// ConfigurationManager.AppSettings["ida:Domain"];
-        //    string resource = "todo";// ConfigurationManager.AppSettings["ida:Resource"];
+        private async Task<string> GetAccessToken()
+        {
+            string clientId = "todo";// ConfigurationManager.AppSettings["ida:ClientId"];
+            string appKey = "todo";// ConfigurationManager.AppSettings["ida:AppKey"];
+            string aadInstance = "todo";// ConfigurationManager.AppSettings["ida:AADInstance"];
+            string domain = "todo";// ConfigurationManager.AppSettings["ida:Domain"];
+            string resource = "todo";// ConfigurationManager.AppSettings["ida:Resource"];
 
-        //    AuthenticationResult result = null;
+            AuthenticationResult result = null;
 
-        //    ClientCredential clientCred = new ClientCredential(clientId, appKey);
-        //    string authHeader = HttpContext.Current.Request.Headers["Authorization"];
-        //    string userAccessToken = authHeader.Substring(authHeader.LastIndexOf(' ')).Trim();
-        //    UserAssertion userAssertion = new UserAssertion(userAccessToken);
-        //    string authority = aadInstance + domain;
-        //    AuthenticationContext authContext = new AuthenticationContext(authority);
+            ClientCredential clientCred = new ClientCredential(clientId, appKey);
+            string authHeader = HttpContext.Current.Request.Headers["Authorization"];
+            string userAccessToken = authHeader.Substring(authHeader.LastIndexOf(' ')).Trim();
+            UserAssertion userAssertion = new UserAssertion(userAccessToken);
+            string authority = aadInstance + domain;
+            AuthenticationContext authContext = new AuthenticationContext(authority);
 
-        //    //result = await authContext.AcquireTokenAsync(resource, clientCred); // auth without user assertion (fails, app only not allowed)
+            //result = await authContext.AcquireTokenAsync(resource, clientCred); // auth without user assertion (fails, app only not allowed)
 
-        //    result = await authContext.AcquireTokenAsync(resource, clientCred, userAssertion); 
-        //    return result.AccessToken;
-        //}
+            result = await authContext.AcquireTokenAsync(resource, clientCred, userAssertion);
+            return result.AccessToken;
+        }
 
 
-        //public ClientContext GetAzureADAccessTokenAuthenticatedContext(String siteUrl, String accessToken)
-        // { 
-        //     var clientContext = new ClientContext(siteUrl); 
- 
- 
-        //     clientContext.ExecutingWebRequest += (sender, args) => 
-        //     { 
-        //         args.WebRequestExecutor.RequestHeaders["Authorization"] = "Bearer " + accessToken; 
-        //     }; 
- 
- 
-        //     return clientContext; 
-        // } 
- 
- 
+
 
 
     }

@@ -8,6 +8,6 @@ namespace Sierra.Azure.CommonDemoAPI.Models.IDoThis
 {
     public interface IDoThisRepository
     {
-        UserProfile GetUserProfile(string userId);
+        Task<UserProfile> GetUserProfile(string userId);
     }
 }

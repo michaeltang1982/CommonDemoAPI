@@ -14,6 +14,7 @@ namespace Sierra.SharePoint.Library.CSOM
     {
         private ILogger _logger;
         private System.Net.ICredentials _credentials;
+        private string _authAccessToken;
 
         /// <summary>
         /// package up credentials for use in connecting to SharePoint
@@ -42,8 +43,10 @@ namespace Sierra.SharePoint.Library.CSOM
 
         }
 
+        
+
         /// <summary>
-        /// create SP Client Utility object
+        /// create SP Client Utility object using the provided credentials
         /// </summary>
         /// <param name="logger"></param>
         /// <param name="credentials"></param>
@@ -53,7 +56,18 @@ namespace Sierra.SharePoint.Library.CSOM
             _credentials = credentials;
         }
 
-        
+
+        /// <summary>
+        /// create SP Client Utility object using the provided azure AD access token
+        /// </summary>
+        /// <param name="logger"></param>
+        /// <param name="authAccessToken"></param>
+        public SPClientUtility(ILogger logger, string authAccessToken)
+        {
+            _logger = logger;
+            _authAccessToken = authAccessToken;
+        }
+
 
 
         public string GetSiteUrl(string parentUrl, string relativeWebUrl)
@@ -67,6 +81,11 @@ namespace Sierra.SharePoint.Library.CSOM
             return "/" + listRelativePath.Trim('/') + "/" + folderRelativePath.Trim('/');
         }
 
+        /// <summary>
+        /// create context using the credentials or token which have been provided
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
         public SP.ClientContext GetContext(string url)
         {
             SP.ClientContext context = null;
@@ -74,15 +93,30 @@ namespace Sierra.SharePoint.Library.CSOM
             try
             {
                 context = new SP.ClientContext(url);
+
+                if (!string.IsNullOrEmpty(_authAccessToken))
+                {
+                    //we have an auth token
+                    context.ExecutingWebRequest += (sender, args) =>
+                    {
+                        args.WebRequestExecutor.RequestHeaders["Authorization"] = "Bearer " + _authAccessToken;
+                    };
+                }
+                else
+                {
+                    //use credentials
+                    context.Credentials = _credentials;
+                }
             }
             catch (ArgumentException)
             {
                 throw new Exception(string.Format("GetContext: No site found with the following url: " + url));
             }
-            context.Credentials = _credentials;
+            
             return context;
         }
 
+        
 
         /// <summary>
         /// Combines a path and a relative path.

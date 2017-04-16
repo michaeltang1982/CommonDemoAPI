@@ -14,7 +14,7 @@ namespace Sierra.Azure.CommonDemoAPI.Repositories.IDoThis
         {
             _configuration = configuration;
         }
-        public UserProfile GetUserProfile(string userId)
+        public async Task<UserProfile> GetUserProfile(string userId)
         {
             return new UserProfile { Id = userId, Name = "user from database repository: " + _configuration };
         }

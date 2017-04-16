@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Sierra.Azure.CommonDemoAPI.Models.IDoThis;
+using System.Threading.Tasks;
 
 namespace Sierra.Azure.CommonDemoAPI.Controllers.IDoThis
 {
@@ -12,9 +13,9 @@ namespace Sierra.Azure.CommonDemoAPI.Controllers.IDoThis
     {
         [HttpGet]
         [Route("api/IDoThis/UserProfile")]
-        public UserProfile GetUserProfile(string id)
+        public async Task<UserProfile> GetUserProfile(string id)
         {
-            return _repository.GetUserProfile(id);
+            return await _repository.GetUserProfile(id);
         }
 
         [HttpPost]
